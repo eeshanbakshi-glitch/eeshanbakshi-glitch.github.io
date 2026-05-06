@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eeshan Bakshi — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;700;800&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0d0d0d;--paper:#f5f3ee;--accent:#185FA5;--accent2:#639922;--muted:#888780;--border:#d3d1c7;--mono:'DM Mono',monospace;--display:'Syne',sans-serif}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);overflow-x:hidden}
+
+#lang-gate{position:fixed;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;gap:2.5rem;transition:opacity 0.5s ease}
+#lang-gate.hidden{opacity:0;pointer-events:none}
+.gate-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(40px,7vw,72px);font-weight:700;color:#ffffff;letter-spacing:-0.01em;text-align:center}
+.gate-name span{color:#ffffff}
+.gate-sub{font-family:var(--mono);font-size:12px;color:#888780;letter-spacing:0.12em;text-transform:uppercase;text-align:center}
+.gate-btns{display:flex;gap:1rem}
+.gate-btn{padding:14px 40px;font-family:var(--mono);font-size:13px;letter-spacing:0.1em;border:1px solid #444441;background:transparent;color:#f5f3ee;cursor:pointer;border-radius:2px;transition:all 0.2s}
+.gate-btn:hover{background:#f5f3ee;color:#0d0d0d;border-color:#f5f3ee}
+.gate-hint{font-family:var(--mono);font-size:11px;color:#5f5e5a;letter-spacing:0.06em}
+
+#site{opacity:0;transition:opacity 0.5s ease;pointer-events:none}
+#site.visible{opacity:1;pointer-events:all}
+
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--paper);z-index:10}
+.nav-name{font-size:13px;font-family:var(--mono);letter-spacing:0.08em;color:var(--muted)}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-links a{font-size:12px;font-family:var(--mono);color:var(--muted);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s}
+.nav-links a:hover{color:var(--ink)}
+.lang-toggle{font-size:11px;font-family:var(--mono);padding:4px 12px;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--muted);cursor:pointer;letter-spacing:0.08em;transition:all 0.2s}
+.lang-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+.hero{padding:5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--accent);margin-bottom:1rem;text-transform:uppercase}
+.hero-name{font-size:clamp(48px,7vw,82px);font-weight:700;line-height:0.92;letter-spacing:-0.01em;font-family:'Cormorant Garamond',Georgia,serif;color:#3a2e1e}
+.hero-name span{color:#1D6E56}
+.hero-sub{margin-top:1.5rem;font-family:var(--mono);font-size:13px;line-height:1.8;color:var(--muted);max-width:380px}
+.hero-right{display:flex;flex-direction:column;gap:1rem;align-items:flex-end}
+.status-pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;padding:7px 14px;border:1px solid var(--accent);color:var(--accent);border-radius:2px;letter-spacing:0.05em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.tag{font-family:var(--mono);font-size:10px;padding:4px 10px;border:1px solid var(--border);color:var(--muted);border-radius:2px;letter-spacing:0.05em}
+
+.contact-strip{display:flex;gap:2rem;padding:1rem 2.5rem;background:var(--ink);flex-wrap:wrap}
+.contact-strip a{font-family:var(--mono);font-size:11px;color:#d3d1c7;text-decoration:none;letter-spacing:0.06em;transition:color 0.2s}
+.contact-strip a:hover{color:#fff}
+
+section{padding:4rem 2.5rem;border-bottom:1px solid var(--border)}
+.sec-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:2.5rem}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.12em}
+.sec-title{font-size:24px;font-weight:700;letter-spacing:-0.02em}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.about-text{font-family:var(--mono);font-size:13px;line-height:2;color:#444441}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.skill-block{padding:1.25rem;border-right:1px solid var(--border)}
+.skill-block:last-child{border-right:none}
+.skill-cat{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:0.75rem}
+.skill-item{font-family:var(--mono);font-size:12px;color:#444441;line-height:2.1}
+
+.projects{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border)}
+.proj-card{padding:1.75rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background 0.2s,color 0.2s}
+.proj-card:hover{background:var(--ink);color:#f5f3ee}
+.proj-card:hover .proj-desc{color:#b4b2a9}
+.proj-card:hover .proj-tag{border-color:#444;color:#999}
+.proj-card:nth-child(2n){border-right:none}
+.proj-card:nth-last-child(-n+2){border-bottom:none}
+.proj-num{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:0.5rem;letter-spacing:0.1em}
+.proj-card:hover .proj-num{color:#85B7EB}
+.proj-name{font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:0.6rem}
+.proj-desc{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--muted);margin-bottom:1rem}
+.proj-tags{display:flex;flex-wrap:wrap;gap:4px}
+.proj-tag{font-family:var(--mono);font-size:10px;padding:2px 8px;border:1px solid var(--border);border-radius:2px;color:var(--muted)}
+
+.exp-list{display:flex;flex-direction:column}
+.exp-row{display:grid;grid-template-columns:200px 1fr;gap:2rem;padding:1.5rem 0;border-bottom:1px solid var(--border)}
+.exp-row:last-child{border-bottom:none}
+.exp-period{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.04em;padding-top:3px}
+.exp-co{font-size:15px;font-weight:700;margin-bottom:4px}
+.exp-role{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:8px;letter-spacing:0.04em}
+.exp-detail{font-family:var(--mono);font-size:11px;color:#5f5e5a;line-height:1.9}
+
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.edu-card{padding:1.5rem;border:1px solid var(--border);border-radius:2px}
+.edu-deg{font-size:15px;font-weight:700;margin-bottom:4px}
+.edu-school{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:4px}
+.edu-period{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.certs{display:flex;flex-wrap:wrap;gap:8px}
+.cert-pill{font-family:var(--mono);font-size:11px;padding:6px 14px;border:1px solid var(--border);border-radius:2px;color:#444441}
+
+footer{padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.footer-note{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.06em}
+.cta{display:inline-block;padding:10px 26px;background:var(--accent);color:#fff;font-family:var(--mono);font-size:12px;letter-spacing:0.08em;border:none;cursor:pointer;border-radius:2px;text-decoration:none;transition:background 0.2s}
+.cta:hover{background:#0C447C}
+
+.hobbies-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border)}
+.hobby-card{padding:1.5rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background 0.2s}
+.hobby-card:hover{background:var(--ink);color:#f5f3ee}
+.hobby-card:hover .hobby-desc{color:#b4b2a9}
+.hobby-card:nth-child(3n){border-right:none}
+.hobby-card:nth-last-child(-n+3){border-bottom:none}
+.hobby-icon{font-size:22px;margin-bottom:0.5rem}
+.hobby-name{font-size:14px;font-weight:700;margin-bottom:4px;letter-spacing:-0.01em}
+.hobby-desc{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7}
+
+
+.fade-in.visible{opacity:1;transform:none}
+
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{align-items:flex-start}
+  .hero-tags{justify-content:flex-start}
+  .about-grid,.projects,.edu-grid{grid-template-columns:1fr}
+  .proj-card{border-right:none}
+  .skills-grid{grid-template-columns:1fr}
+  .skill-block{border-right:none;border-bottom:1px solid var(--border)}
+  .exp-row{grid-template-columns:1fr}
+  .contact-strip{gap:1rem}
+  nav{padding:1rem 1.25rem}
+  section{padding:2.5rem 1.25rem}
+  .hero{padding:3rem 1.25rem 2.5rem}
+  footer{flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="lang-gate">
+  <div class="gate-name">Welcome</div>
+  <div class="gate-hint" style="color:#888780;font-family:var(--mono);font-size:12px;letter-spacing:0.1em">select your language</div>
+  <div class="gate-btns">
+    <button class="gate-btn" onclick="setLang('en')">English</button>
+    <button class="gate-btn" onclick="setLang('de')">Deutsch</button>
+  </div>
+</div>
+
+<div id="site">
+  <nav>
+    <span class="nav-name" id="nav-name">eeshan bakshi — portfolio</span>
+    <div class="nav-links">
+      <a href="#about" id="nav-about">about</a>
+      <a href="#projects" id="nav-projects">projects</a>
+      <a href="#experience" id="nav-experience">experience</a>
+      <a href="#contact-section" id="nav-contact">contact</a>
+      <button class="lang-toggle" onclick="toggleLang()" id="lang-toggle-btn">DE</button>
+    </div>
+  </nav>
+
+  <div class="hero fade-in visible" style="display:block;padding:3rem 2.5rem 2.5rem">
+    <div class="hero-name" style="font-size:clamp(56px,9vw,100px);font-weight:700;line-height:0.92;letter-spacing:-0.02em;font-family:'Cormorant Garamond',Georgia,serif;color:#3a2e1e;margin-bottom:2rem">Eeshan <span style="color:#1D6E56">Bakshi</span></div>
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:2.5rem;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <img src="data:image/jpeg;base64,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" alt="Eeshan Bakshi" style="width:190px;height:240px;object-fit:cover;object-position:top;border:1px solid var(--border)">
+        <div>
+          <strong style="font-family:'Cormorant Garamond',Georgia,serif;color:#3a2e1e;font-size:15px;font-weight:700;display:block;line-height:1.4" id="hero-sub">M.Sc. Mechatronics · Berliner Hochschule für Technik · Berlin</strong>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem;padding-top:0.5rem">
+        <div class="eyebrow" id="hero-eyebrow">control engineering · embedded systems · FEA · simulation</div>
+        <div style="font-family:var(--mono);font-size:13px;line-height:1.8;color:var(--muted);max-width:420px">I design, model, and simulate dynamic systems — from inverted pendulums to lunar landers.</div>
+        <div class="status-pill" style="font-size:13px;padding:10px 18px;border-width:1.5px;font-weight:500;align-self:flex-start"><span class="dot"></span><span id="hero-status">open to werkstudent &amp; thesis roles · Berlin</span></div>
+        <div class="hero-tags" style="justify-content:flex-start">
+          <span class="tag">MATLAB / Simulink</span>
+          <span class="tag">LQR · PID · State-Space</span>
+          <span class="tag">ANSYS FEM</span>
+          <span class="tag">Embedded Systems</span>
+          <span class="tag">Creo · Solidworks</span>
+          <span class="tag">Python · C++</span>
+          <span class="tag" id="lang-tag">German C1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="about" class="fade-in">
+    <div class="sec-header"><span class="sec-num">01 —</span><span class="sec-title" id="sec-about">About</span></div>
+    <div class="about-grid">
+      <div class="about-text" id="about-text">Curious and analytical engineer with a focus on mathematical system modelling, control engineering, and simulation. I combine rigorous theoretical foundations — Laplace transforms, state-space representation, LQR design — with hands-on hardware implementation.<br><br>Currently completing my Master's in Mechatronics at Berliner Hochschule für Technik, building on a Bachelor's from SRM University (Chennai) and industrial experience at Bosch Rexroth, Klöckner Desma, and HAL Bangalore.<br><br>I am looking for a Werkstudent role in control systems or simulation, ideally one that develops into a Master's thesis project.</div>
+      <div>
+        <div class="skills-grid">
+          <div class="skill-block"><div class="skill-cat" id="skill-cat-1">simulation</div><div class="skill-item">MATLAB</div><div class="skill-item">Simulink</div><div class="skill-item">STM Cube IDE</div></div>
+          <div class="skill-block"><div class="skill-cat" id="skill-cat-2">mechanical</div><div class="skill-item">ANSYS Mech</div><div class="skill-item">Creo (PTC)</div><div class="skill-item">Solidworks</div></div>
+          <div class="skill-block"><div class="skill-cat" id="skill-cat-3">code</div><div class="skill-item">Python</div><div class="skill-item">C / C++</div><div class="skill-item">LabVIEW</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="fade-in">
+    <div class="sec-header"><span class="sec-num">02 —</span><span class="sec-title" id="sec-projects">Projects</span></div>
+    <div class="projects">
+      <div class="proj-card">
+        <div class="proj-num">P.01 · BHT Berlin</div>
+        <div class="proj-name" id="p1-name">Inverted Pendulum on a Cart</div>
+        <div class="proj-desc" id="p1-desc">Full mathematical modelling of a nonlinear system. State-space representation, Kalman filter, and LQR controller design. Physical model designed in Creo and structural feasibility verified via ANSYS FEM simulation.</div>
+        <div class="proj-tags"><span class="proj-tag">LQR</span><span class="proj-tag">Kalman Filter</span><span class="proj-tag">MATLAB</span><span class="proj-tag">Creo</span><span class="proj-tag">ANSYS</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">P.02 · BHT Berlin</div>
+        <div class="proj-name" id="p2-name">2D Moon Lander</div>
+        <div class="proj-desc" id="p2-desc">Complete mathematical model for soft landing control simulated in MATLAB/Simulink with a cascaded PI-PID controller. Extended with a 4-leg mass-spring-damper system to optimise touchdown dynamics.</div>
+        <div class="proj-tags"><span class="proj-tag">Cascaded PID</span><span class="proj-tag">Simulink</span><span class="proj-tag">Dynamics</span><span class="proj-tag">Mass-Spring-Damper</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">P.03 · BHT Berlin</div>
+        <div class="proj-name" id="p3-name">Force-Compensated Scale</div>
+        <div class="proj-desc" id="p3-desc">Real hardware implementation of a kraftkompensierte Waage. PID and state-space controller design with potentiometer tuning and full Sprung- and Impulsantwort analysis.</div>
+        <div class="proj-tags"><span class="proj-tag">PID</span><span class="proj-tag">Hardware</span><span class="proj-tag">State-Space</span><span class="proj-tag">Force Control</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">P.04 · Bachelorarbeit</div>
+        <div class="proj-name" id="p4-name">Pick-and-Place Robot Arm</div>
+        <div class="proj-desc" id="p4-desc">LabVIEW and MATLAB-based control system for an industrial robot arm using machine vision. Autonomous trajectory planning via camera-robot data fusion. Full mechanical model built in Solidworks.</div>
+        <div class="proj-tags"><span class="proj-tag">LabVIEW</span><span class="proj-tag">Machine Vision</span><span class="proj-tag">Trajectory Planning</span><span class="proj-tag">Solidworks</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="fade-in">
+    <div class="sec-header"><span class="sec-num">03 —</span><span class="sec-title" id="sec-experience">Experience</span></div>
+    <div class="exp-list">
+      <div class="exp-row">
+        <div class="exp-period">Nov 2017 – Jan 2018</div>
+        <div><div class="exp-co">HAL (Hindustan Aeronautics) · Bangalore, India</div><div class="exp-role" id="exp1-role">Industrial Training — PLC, Hydraulics, Pneumatics</div><div class="exp-detail" id="exp1-detail">PLC programming with IndraWorks — writing and testing control logic. Hydraulic system design using pressure valve configurations. Hands-on pneumatic circuit assembly and behaviour analysis under varying conditions.</div></div>
+      </div>
+      <div class="exp-row">
+        <div class="exp-period">Jun 2017 – Aug 2017</div>
+        <div><div class="exp-co">Klöckner Desma · Ahmedabad, India</div><div class="exp-role" id="exp2-role">Internship — Assembly, PLC &amp; Testing</div><div class="exp-detail" id="exp2-detail">Temperature and functional testing on mould-making machines including electrical insulation and rubber component applications. Quality inspection and documentation prior to delivery.</div></div>
+      </div>
+      <div class="exp-row">
+        <div class="exp-period">Jun 2016 – May 2017</div>
+        <div><div class="exp-co">Bosch Rexroth · Chennai, India</div><div class="exp-role" id="exp3-role">Internship — Testing</div><div class="exp-detail" id="exp3-detail">Documentation and analysis of aircraft assemblies in the jet assembly department. Observation, recording, and evaluation of jet engine tests.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fade-in">
+    <div class="sec-header"><span class="sec-num">04 —</span><span class="sec-title" id="sec-education">Education</span></div>
+    <div class="edu-grid">
+      <div class="edu-card"><div class="edu-deg" id="edu1-deg">Mechatronics, M.S.</div><div class="edu-school">Berliner Hochschule für Technik (BHT)</div><div class="edu-period" id="edu1-period">Oktober 2022 – present · Berlin, Germany</div></div>
+      <div class="edu-card"><div class="edu-deg" id="edu2-deg">Mechatronics, B.S.</div><div class="edu-school">SRM University</div><div class="edu-period">July 2015 – June 2019 · Chennai, India</div></div>
+    </div>
+  </section>
+
+  <section class="fade-in">
+    <div class="sec-header"><span class="sec-num">05 —</span><span class="sec-title" id="sec-certs">Certifications</span></div>
+    <div class="certs">
+      <span class="cert-pill">Deep Learning Specialization — DeepLearning.AI</span>
+      <span class="cert-pill">Convolutional Neural Networks — DeepLearning.AI</span>
+      <span class="cert-pill">Sequence Models — DeepLearning.AI</span>
+      <span class="cert-pill">Neural Networks &amp; Deep Learning — DeepLearning.AI</span>
+      <span class="cert-pill">Improving Deep Neural Networks — DeepLearning.AI</span>
+      <span class="cert-pill">Structuring ML Projects — DeepLearning.AI</span>
+      <span class="cert-pill">ML Pipelines with Azure ML Studio — Coursera</span>
+    </div>
+  </section>
+
+  <section class="fade-in">
+    <div class="sec-header"><span class="sec-num">06 —</span><span class="sec-title" id="sec-hobbies">Hobbies &amp; Interests</span></div>
+    <div class="hobbies-grid">
+      <div class="hobby-card"><div class="hobby-icon">📷</div><div class="hobby-name" id="h1">Photography</div><div class="hobby-desc" id="h1d">Black-and-white, landscape, and portrait styles</div></div>
+      <div class="hobby-card"><div class="hobby-icon">🎸</div><div class="hobby-name" id="h2">Guitar</div><div class="hobby-desc" id="h2d">Classic rock and pop, Squier by Fender</div></div>
+      <div class="hobby-card"><div class="hobby-icon">🎵</div><div class="hobby-name" id="h3">House Music &amp; DJing</div><div class="hobby-desc" id="h3d">Electronic music production and mixing</div></div>
+      <div class="hobby-card"><div class="hobby-icon">🏓</div><div class="hobby-name" id="h4">Table Tennis</div><div class="hobby-desc" id="h4d">Competitive recreational play</div></div>
+      <div class="hobby-card"><div class="hobby-icon">🍳</div><div class="hobby-name" id="h5">Cooking</div><div class="hobby-desc" id="h5d">Experimenting with global cuisines</div></div>
+      <div class="hobby-card"><div class="hobby-icon">🖨️</div><div class="hobby-name" id="h6">3D Printing</div><div class="hobby-desc" id="h6d">Rapid prototyping and mechanical parts</div></div>
+    </div>
+  </section>
+
+  <div class="contact-strip" id="contact-section">
+    <a href="mailto:eeshanbakshi@gmail.com">eeshanbakshi@gmail.com</a>
+    <a href="tel:+4915206347472">+49 1520 634 7472</a>
+    <a>Berlin, Germany</a>
+    <a href="https://www.linkedin.com/in/eeshan23/" target="_blank">LinkedIn ↗</a>
+  </div>
+
+  <footer>
+    <span class="footer-note" id="footer-note">Berlin · available now · German C1 · English native</span>
+    <a class="cta" href="mailto:eeshanbakshi@gmail.com" id="footer-cta">get in touch ↗</a>
+  </footer>
+</div>
+
+<script>
+let currentLang='en';
+const t={
+  en:{
+    'nav-name':'eeshan bakshi — portfolio',
+    'nav-about':'about','nav-projects':'projects','nav-experience':'experience','nav-contact':'contact',
+    'lang-toggle-btn':'DE',
+    'hero-eyebrow':'control engineering · embedded systems · FEA · simulation',
+    'hero-sub':'M.Sc. Mechatronics · Berliner Hochschule für Technik · Berlin',
+    'lang-tag':'German C1',
+    'sec-about':'About',
+    'about-text':"Curious and analytical engineer with a focus on mathematical system modelling, control engineering, and simulation. I combine rigorous theoretical foundations — Laplace transforms, state-space representation, LQR design — with hands-on hardware implementation.<br><br>Currently completing my Master's in Mechatronics at Berliner Hochschule für Technik, building on a Bachelor's from SRM University (Chennai) and industrial experience at Bosch Rexroth, Klöckner Desma, and HAL Bangalore.<br><br>I am looking for a Werkstudent role in control systems or simulation, ideally one that develops into a Master's thesis project.",
+    'skill-cat-1':'simulation','skill-cat-2':'mechanical','skill-cat-3':'code',
+    'sec-projects':'Projects',
+    'p1-name':'Inverted Pendulum on a Cart',
+    'p1-desc':'Full mathematical modelling of a nonlinear system. State-space representation, Kalman filter, and LQR controller design. Physical model designed in Creo and structural feasibility verified via ANSYS FEM simulation.',
+    'p2-name':'2D Moon Lander',
+    'p2-desc':'Complete mathematical model for soft landing control simulated in MATLAB/Simulink with a cascaded PI-PID controller. Extended with a 4-leg mass-spring-damper system to optimise touchdown dynamics.',
+    'p3-name':'Force-Compensated Scale',
+    'p3-desc':'Real hardware implementation of a kraftkompensierte Waage. PID and state-space controller design with potentiometer tuning and full Sprung- and Impulsantwort analysis.',
+    'p4-name':'Pick-and-Place Robot Arm',
+    'p4-desc':'LabVIEW and MATLAB-based control system for an industrial robot arm using machine vision. Autonomous trajectory planning via camera-robot data fusion. Full mechanical model built in Solidworks.',
+    'sec-experience':'Experience',
+    'exp1-role':'Internship — Testing',
+    'exp1-detail':'Documentation and analysis of aircraft assemblies in the jet assembly department. Observation, recording, and evaluation of jet engine tests.',
+    'exp2-role':'Internship — Assembly, PLC &amp; Testing',
+    'exp2-detail':'Temperature and functional testing on mould-making machines including electrical insulation and rubber component applications. Quality inspection and documentation prior to delivery.',
+    'exp3-role':'Industrial Training — PLC, Hydraulics, Pneumatics',
+    'exp3-detail':'PLC programming with IndraWorks — writing and testing control logic. Hydraulic system design using pressure valve configurations. Hands-on pneumatic circuit assembly and behaviour analysis under varying conditions.',
+    'sec-education':'Education',
+    'edu1-deg':'Mechatronics, M.S.','edu1-period':'Oktober 2022 – present · Berlin, Germany','edu2-deg':'Mechatronics, B.S.',
+    'sec-certs':'Certifications',
+    'footer-note':'Berlin · available now · German C1 · English native',
+    'footer-cta':'get in touch ↗',
+    'sec-hobbies':'Hobbies &amp; Interests',
+    'h1':'Photography','h1d':'Black-and-white, landscape, and portrait styles',
+    'h2':'Guitar','h2d':'Classic rock and pop, Squier by Fender',
+    'h3':'House Music &amp; DJing','h3d':'Electronic music production and mixing',
+    'h4':'Table Tennis','h4d':'Competitive recreational play',
+    'h5':'Cooking','h5d':'Experimenting with global cuisines',
+    'h6':'3D Printing','h6d':'Rapid prototyping and mechanical parts'
+  },
+  de:{
+    'nav-name':'eeshan bakshi — portfolio',
+    'nav-about':'über mich','nav-projects':'projekte','nav-experience':'erfahrung','nav-contact':'kontakt',
+    'lang-toggle-btn':'EN',
+    'hero-eyebrow':'regelungstechnik · embedded systems · FEA · simulation',
+    'hero-sub':'M.Sc. Mechatronik · Berliner Hochschule für Technik · Berlin',
+    'hero-status':'offen für Werkstudent- &amp; Abschlussarbeit · Berlin',
+    'lang-tag':'Deutsch C1',
+    'sec-about':'Über mich',
+    'about-text':'Neugieriger und analytischer Ingenieur mit Schwerpunkt auf mathematischer Systemmodellierung, Regelungstechnik und Simulation. Ich verbinde fundierte Theorie — Laplace-Transformation, Zustandsraumdarstellung, LQR-Entwurf — mit praktischer Hardwareimplementierung.<br><br>Derzeit absolviere ich meinen Master in Mechatronik an der Berliner Hochschule für Technik, aufbauend auf einem Bachelor der SRM University (Chennai) sowie Industrieerfahrung bei Bosch Rexroth, Klöckner Desma und HAL Bangalore.<br><br>Ich suche eine Werkstudentenstelle im Bereich Regelungstechnik oder Simulation, idealerweise mit der Möglichkeit zur Weiterentwicklung als Masterarbeit.',
+    'skill-cat-1':'simulation','skill-cat-2':'mechanik','skill-cat-3':'programmierung',
+    'sec-projects':'Projekte',
+    'p1-name':'Inverses Pendel auf einem Wagen',
+    'p1-desc':'Vollständige mathematische Modellierung eines nichtlinearen Systems. Zustandsraumdarstellung, Kalman-Filter und LQR-Reglerentwurf. Physisches Modell in Creo konstruiert, strukturelle Machbarkeit per ANSYS-FEM-Simulation verifiziert.',
+    'p2-name':'2D-Mondlander',
+    'p2-desc':'Vollständiges mathematisches Modell zur Steuerung einer weichen Landung, simuliert in MATLAB/Simulink mit einem kaskadierten PI-PID-Regler. Erweiterung durch ein 4-beiniges Masse-Feder-Dämpfer-System zur Optimierung der Landedynamik.',
+    'p3-name':'Kraftkompensierte Waage',
+    'p3-desc':'Reale Hardwareimplementierung einer kraftkompensierten Waage. PID- und Zustandsraumreglerentwurf mit Potentiometertuning sowie vollständige Sprung- und Impulsantwortanalyse.',
+    'p4-name':'Pick-and-Place-Roboterarm',
+    'p4-desc':'LabVIEW- und MATLAB-basiertes Steuerungssystem für einen Industrierobotarm mit Maschinensehen. Autonome Trajektorienplanung durch Kamera-Roboter-Datenfusion. Vollständiges mechanisches Modell in Solidworks erstellt.',
+    'sec-experience':'Berufserfahrung',
+    'exp1-role':'Praktikum — Prüfung',
+    'exp1-detail':'Dokumentation und Analyse von Flugzeugbaugruppen in der Strahltriebwerksabteilung. Beobachtung, Aufzeichnung und Auswertung von Triebwerkstests.',
+    'exp2-role':'Praktikum — Montage, SPS &amp; Prüfung',
+    'exp2-detail':'Temperatur- und Funktionstests an Formgebungsmaschinen, u.a. für elektrische Isolierungen und Gummibauteile. Qualitätsprüfung und Dokumentation vor der Auslieferung.',
+    'exp3-role':'Industriepraktikum — SPS, Hydraulik, Pneumatik',
+    'exp3-detail':'SPS-Programmierung mit IndraWorks — Schreiben und Testen von Steuerungslogik. Hydrauliksystemdesign mit Druckventilkonfigurationen. Pneumatische Schaltungsaufbauten und Verhaltensanalyse unter wechselnden Bedingungen.',
+    'sec-education':'Ausbildung',
+    'edu1-deg':'Mechatronik, M.Sc.','edu1-period':'Oktober 2022 – heute · Berlin, Deutschland','edu2-deg':'Mechatronik, B.Sc.',
+    'sec-certs':'Zertifikate',
+    'footer-note':'Berlin · ab sofort verfügbar · Deutsch C1 · Englisch Muttersprache',
+    'footer-cta':'Kontakt aufnehmen ↗',
+    'sec-hobbies':'Hobbys &amp; Interessen',
+    'h1':'Fotografie','h1d':'Schwarz-Weiß, Landschaft und Portrait',
+    'h2':'Gitarre','h2d':'Classic Rock und Pop, Squier by Fender',
+    'h3':'House Music &amp; DJing','h3d':'Elektronische Musikproduktion und Mixen',
+    'h4':'Tischtennis','h4d':'Freizeitsport auf Wettkampfniveau',
+    'h5':'Kochen','h5d':'Experimentieren mit internationalen Küchen',
+    'h6':'3D-Druck','h6d':'Rapid Prototyping und mechanische Bauteile'
+  }
+};
+
+function applyLang(lang){
+  currentLang=lang;
+  const d=t[lang];
+  for(const[id,val]of Object.entries(d)){
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=val;
+  }
+  document.documentElement.lang=lang;
+}
+
+function setLang(lang){
+  applyLang(lang);
+  const gate=document.getElementById('lang-gate');
+  const site=document.getElementById('site');
+  gate.classList.add('hidden');
+  setTimeout(()=>{
+    gate.style.display='none';
+    site.classList.add('visible');
+    setupFadeIns();
+  },500);
+}
+
+function toggleLang(){
+  applyLang(currentLang==='en'?'de':'en');
+}
+
+function setupFadeIns(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:0.08});
+  document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+}
+</script>
+</body>
+</html>
